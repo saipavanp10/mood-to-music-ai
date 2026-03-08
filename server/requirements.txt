@@ -1,9 +1,7 @@
 fastapi
-uvicorn
-sqlalchemy
-pydantic
-deepface
-tf-keras
-opencv-python-headless
+uvicorn[standard]
+numpy
+pandas
+scikit-learn
+tensorflow
 python-multipart
-msgpack
