@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+deepface
+tf-keras
+opencv-python-headless
+python-multipart
+msgpack

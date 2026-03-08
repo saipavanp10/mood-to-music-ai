@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood to Music - AI Powered</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div id="app" class="glass-card animate-fade-in">
+
+    <!-- AUTH SECTION -->
+    <div id="auth-section">
+      <h1>Mood to Music</h1>
+      <p>Login to start your emotional journey</p>
+      <div class="input-group">
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+      </div>
+      <button id="login-btn">Login</button>
+      <button id="register-btn" style="background: transparent; border: 1px solid white;">Register</button>
+      <p id="auth-error" style="color: #ff6b6b; margin-top: 10px;"></p>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboard-section" class="hidden">
+      <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <img src="./public/logo.png" alt="Logo" style="height: 50px;">
+          <h2>Hello, <span id="user-display">User</span></h2>
+        </div>
+        <button id="logout-btn" style="padding: 8px 15px; margin: 0; font-size: 14px;">Logout</button>
+      </header>
+
+      <div id="video-container">
+        <video id="webcam" autoplay playsinline muted></video>
+      </div>
+
+      <div class="controls">
+        <button id="analyze-btn">Analyze Mood</button>
+      </div>
+
+      <!-- RICH RESULTS AREA -->
+      <div id="result-area" class="hidden">
+        <h3 id="mood-text" style="font-size: 2em; margin: 20px 0; color: #4fd1c5;">Mood: ...</h3>
+        <div id="songs-grid" class="songs-grid">
+          <!-- Song Cards injected here -->
+        </div>
+      </div>
+
+      <div style="margin-top: 30px; text-align: left;">
+        <h4>Recent History</h4>
+        <ul id="history-list" style="list-style: none; padding: 0; max-height: 150px; overflow-y: auto;">
+          <!-- History items will go here -->
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+
+</html>

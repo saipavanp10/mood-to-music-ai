@@ -1,0 +1,175 @@
+:root {
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --accent-color: #ff0080;
+  --font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  padding: 40px;
+  max-width: 900px;
+  /* Increased for grid */
+  width: 90%;
+  max-height: 90vh;
+  /* Scrollable if needed */
+  overflow-y: auto;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+/* Scrollbar Hide */
+.glass-card::-webkit-scrollbar {
+  display: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: #fff;
+  width: 80%;
+  margin: 10px 0;
+  outline: none;
+  font-size: 16px;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+button {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(255, 0, 128, 0.3);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 0, 128, 0.5);
+}
+
+#video-container {
+  position: relative;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 400px;
+  /* Smaller video */
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+video {
+  width: 100%;
+  display: block;
+}
+
+/* Song Cards Grid */
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.song-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 10px;
+  transition: transform 0.2s;
+}
+
+.song-card:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.song-card img {
+  width: 100%;
+  border-radius: 10px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.song-card h4 {
+  margin: 10px 0 5px 0;
+  font-size: 14px;
+}
+
+.song-card p {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.play-btn {
+  display: inline-block;
+  padding: 5px 15px;
+  background: #1DB954;
+  /* Spotify Green */
+  color: white;
+  text-decoration: none;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
