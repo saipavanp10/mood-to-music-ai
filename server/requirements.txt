@@ -3,5 +3,4 @@ uvicorn[standard]
 numpy
 pandas
 scikit-learn
-tensorflow
 python-multipart
