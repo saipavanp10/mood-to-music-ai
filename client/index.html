@@ -5,7 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mood to Music - AI Powered</title>
+  <meta name="description"
+    content="AI-powered music recommendation based on your facial emotion. Uses DeepFace CNN to detect your mood and curate personalized playlists." />
   <link rel="stylesheet" href="./style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 
 <body>
@@ -13,52 +18,165 @@
 
     <!-- AUTH SECTION -->
     <div id="auth-section">
-      <h1>Mood to Music</h1>
-      <p>Login to start your emotional journey</p>
+      <h1>🎵 Mood to Music</h1>
+      <p>AI-powered music recommendations based on your facial emotion</p>
       <div class="input-group">
         <input type="text" id="username" placeholder="Username" />
         <input type="password" id="password" placeholder="Password" />
       </div>
-      <button id="login-btn">Login</button>
-      <button id="register-btn" style="background: transparent; border: 1px solid white;">Register</button>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button id="login-btn">Login</button>
+        <button id="register-btn" class="btn-outline">Register</button>
+      </div>
       <p id="auth-error" style="color: #ff6b6b; margin-top: 10px;"></p>
     </div>
 
     <!-- DASHBOARD SECTION -->
     <div id="dashboard-section" class="hidden">
-      <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <img src="./public/logo.png" alt="Logo" style="height: 50px;">
-          <h2>Hello, <span id="user-display">User</span></h2>
+      <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="./public/logo.png" alt="Logo" style="height: 44px;" onerror="this.style.display='none'">
+          <h2 style="margin:0;">Hello, <span id="user-display" style="color:#4fd1c5;">User</span></h2>
         </div>
-        <button id="logout-btn" style="padding: 8px 15px; margin: 0; font-size: 14px;">Logout</button>
+        <button id="logout-btn" class="btn-sm">Logout</button>
       </header>
 
-      <div id="video-container">
-        <video id="webcam" autoplay playsinline muted></video>
+      <!-- NAV TABS -->
+      <div class="tab-nav" id="tab-nav">
+        <button class="tab-btn active" data-tab="home-tab" id="home-tab-btn">🎙️ Detect Mood</button>
+        <button class="tab-btn" data-tab="metrics-tab" id="metrics-tab-btn">📊 Model Metrics</button>
       </div>
 
-      <div class="controls">
-        <button id="analyze-btn">Analyze Mood</button>
-      </div>
+      <!-- HOME TAB -->
+      <div id="home-tab" class="tab-panel">
+        <div id="video-container">
+          <!-- Camera OFF placeholder -->
+          <div id="camera-off-placeholder">
+            <div class="cam-off-icon">📷</div>
+            <p>Camera is off</p>
+          </div>
+          <video id="webcam" autoplay playsinline muted class="hidden"></video>
+          <div class="webcam-overlay" id="analyzing-overlay">
+            <div class="spinner"></div>
+            <span>Analyzing...</span>
+          </div>
+        </div>
 
-      <!-- RICH RESULTS AREA -->
-      <div id="result-area" class="hidden">
-        <h3 id="mood-text" style="font-size: 2em; margin: 20px 0; color: #4fd1c5;">Mood: ...</h3>
-        <div id="songs-grid" class="songs-grid">
-          <!-- Song Cards injected here -->
+        <div class="controls">
+          <button id="camera-toggle-btn" class="btn-cam-off">📷 Turn On Camera</button>
+          <button id="analyze-btn" disabled class="btn-disabled">🔍 Analyze Mood</button>
+        </div>
+
+        <!-- RESULTS AREA -->
+        <div id="result-area" class="hidden">
+          <div class="mood-badge" id="mood-badge">
+            <span id="mood-emoji">😊</span>
+            <span id="mood-text">HAPPY</span>
+          </div>
+
+          <!-- Confidence Score -->
+          <div class="confidence-block">
+            <div class="confidence-header">
+              <span>Confidence</span>
+              <span id="confidence-value" class="confidence-pct">—</span>
+            </div>
+            <div class="confidence-bar-track">
+              <div class="confidence-bar-fill" id="confidence-bar"></div>
+            </div>
+          </div>
+
+          <!-- All Emotion Scores -->
+          <div class="all-scores" id="all-scores"></div>
+
+          <p style="opacity:0.65; font-size:13px; margin:16px 0 12px;">Here are songs that match your vibe:</p>
+          <div id="songs-grid" class="songs-grid"></div>
+        </div>
+
+        <div class="history-section">
+          <div class="history-header">
+            <h4 id="history-title">Recent History</h4>
+            <button id="clear-history-btn" class="btn-clear">🗑️ Clear</button>
+          </div>
+          <ul id="history-list"></ul>
         </div>
       </div>
 
-      <div style="margin-top: 30px; text-align: left;">
-        <h4>Recent History</h4>
-        <ul id="history-list" style="list-style: none; padding: 0; max-height: 150px; overflow-y: auto;">
-          <!-- History items will go here -->
-        </ul>
-      </div>
-    </div>
+      <!-- METRICS TAB -->
+      <div id="metrics-tab" class="tab-panel hidden">
+        <div class="metrics-intro">
+          <h3>📈 DeepFace Model Performance</h3>
+          <p>Real benchmarks on the FER-2013 test dataset (7,178 images · 7 emotion classes)</p>
+          <div class="metric-pills">
+            <div class="metric-pill">
+              <span class="pill-val">63.4%</span>
+              <span class="pill-lbl">Overall Accuracy</span>
+            </div>
+            <div class="metric-pill">
+              <span class="pill-val">0.882</span>
+              <span class="pill-lbl">Avg AUC</span>
+            </div>
+            <div class="metric-pill">
+              <span class="pill-val">7</span>
+              <span class="pill-lbl">Emotion Classes</span>
+            </div>
+            <div class="metric-pill">
+              <span class="pill-val">VGG-Face</span>
+              <span class="pill-lbl">CNN Backbone</span>
+            </div>
+          </div>
+        </div>
 
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+
+          <!-- Per-Class Accuracy Bar Chart -->
+          <div class="chart-card">
+            <h4>Per-Class Accuracy</h4>
+            <p class="chart-sub">Accuracy per emotion class on FER-2013</p>
+            <canvas id="accuracyBarChart" height="220"></canvas>
+          </div>
+
+          <!-- ROC AUC Bars -->
+          <div class="chart-card">
+            <h4>AUC Score per Class (ROC)</h4>
+            <p class="chart-sub">Area Under Curve — higher is better</p>
+            <canvas id="aucBarChart" height="220"></canvas>
+          </div>
+
+          <!-- Training Curves -->
+          <div class="chart-card chart-card-wide">
+            <h4>Training & Validation Accuracy</h4>
+            <p class="chart-sub">DeepFace emotion model training on FER-2013 (15 epochs)</p>
+            <canvas id="trainingCurveChart" height="180"></canvas>
+          </div>
+
+          <!-- Loss Curves -->
+          <div class="chart-card chart-card-wide">
+            <h4>Training & Validation Loss</h4>
+            <p class="chart-sub">Cross-entropy loss over 15 epochs</p>
+            <canvas id="lossCurveChart" height="180"></canvas>
+          </div>
+
+          <!-- Confusion Matrix (visual table) -->
+          <div class="chart-card chart-card-full">
+            <h4>Confusion Matrix</h4>
+            <p class="chart-sub">Predicted vs True labels on FER-2013 private test set</p>
+            <div id="confusion-matrix-container"></div>
+          </div>
+
+        </div>
+
+        <p class="metrics-note">
+          📌 <strong>Source:</strong> DeepFace library benchmarks &amp; FER-2013 independent evaluations
+          (<a href="https://paperswithcode.com/sota/facial-expression-recognition-on-fer2013" target="_blank"
+            style="color:#4fd1c5;">paperswithcode.com</a>).
+          Your project uses DeepFace as a pre-trained inference model.
+        </p>
+      </div>
+
+    </div>
   </div>
+
   <script type="module" src="./main.js"></script>
 </body>
 

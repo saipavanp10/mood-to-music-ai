@@ -14,16 +14,22 @@ class EmotionModel:
             img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
             # DeepFace analysis
-            # enforce_detection=False allows it to guess even if face is partial
             result = DeepFace.analyze(img, actions=['emotion'], enforce_detection=False)
             
-            # Result is a list of dicts or a dict
             if isinstance(result, list):
                 result = result[0]
             
-            return result['dominant_emotion']
+            dominant   = result['dominant_emotion']
+            all_scores = result['emotion']  # dict {emotion: numpy.float32}
+
+            # ⚠️ Convert numpy.float32 → plain Python float for JSON serialization
+            all_scores_clean = {k: round(float(v), 2) for k, v in all_scores.items()}
+            confidence       = round(float(all_scores_clean.get(dominant, 0.0)), 2)
+
+            return dominant, confidence, all_scores_clean
         except Exception as e:
             print(f"Error in emotion detection: {e}")
-            return "neutral" # Fallback
+            return "neutral", 50.0, {}  # Fallback
+
 
 model = EmotionModel()

@@ -9,6 +9,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+    is_admin = Column(Integer, default=0) # SQLite doesn't have strict boolean, using Integer 0/1
     
     history_entries = relationship("History", back_populates="owner")
 
