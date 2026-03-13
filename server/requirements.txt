@@ -1,9 +1,10 @@
 fastapi
 uvicorn[standard]
-numpy
+numpy<2.0.0
 pandas
 scikit-learn
 python-multipart
-deepface
+deepface==0.0.92
 opencv-python-headless
-sqlalchemy
+sqlalchemy
+tf-keras
